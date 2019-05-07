@@ -89,7 +89,8 @@ else
 	exit 0
 fi
 
-
+check_for_software git
+echo
 check_for_software zsh
 echo 
 check_for_software vim
