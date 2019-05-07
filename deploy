@@ -45,6 +45,15 @@ check_oh_my_zsh(){
   fi
 }
 
+check_tmux_plugin_manager(){
+  echo "Checking to see if tmux plugin manager is installed"
+  if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+    git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
+  else
+	echo "tmux plugin manager installed"
+  fi
+}
+
 check_default_shell() {
 	if [ -z "${SHELL##*zsh*}" ] ;then
 			echo "Default shell is zsh."
@@ -89,11 +98,13 @@ check_for_software tmux
 echo
 check_oh_my_zsh
 echo
+check_tmux_plugin_manager
+echo
 
 check_default_shell
 
 echo
-echo -n "Would you like to backup your current dotfiles? (y/n) "
+echo -n "Would you like to backup your current configurations? (y/n) "
 old_stty_cfg=$(stty -g)
 stty raw -echo
 answer=$( while ! head -c 1 | grep -i '[ny]' ;do true ;done )
@@ -106,9 +117,9 @@ else
 	echo -e "\nNot backing up old dotfiles."
 fi
 
-printf "source '$(dirname $(readlink -f $0))/zsh/zshrc'" > ~/.zshrc
+printf "source '$(dirname $(readlink -f $0))/zsh/zshrc'" > "$HOME/.zshrc"
 #printf "so $(dirname $(readlink -f $0))/vim/vimrc.vim" > ~/.vimrc
-#printf "source-file $HOME/dotfiles/tmux/tmux.conf" > ~/.tmux.conf
+printf "source-file '$(dirname $(readlink -f $0))/tmux/tmux.conf'" > "$HOME/.tmux.conf"
 
 echo
 echo "Please log out and log back in for default shell to be initialized."
