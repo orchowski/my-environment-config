@@ -58,7 +58,7 @@ check_tmux_plugin_manager(){
 }
 
 configure_vim(){
-  echo "Checking to see if tmux plugin manager is installed"
+  echo "Checking to see if vim plugin manager is installed"
   if [ ! -d "$HOME/.vim/bundle" ]; then
     mkdir -p $HOME/.vim/autoload $HOME/.vim/bundle && curl -LSso $HOME/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
     git clone https://github.com/scrooloose/nerdtree.git $HOME/.vim/bundle/nerdtree
@@ -67,6 +67,19 @@ configure_vim(){
   fi
 }
 
+
+configure_git(){
+  echo -e "Configuring git...\n"
+  echo "email:"
+  email=$(stty -g)
+  echo "name:"
+  name=$(stty -g)
+  git config --global user.name "$name"
+  git config --global user.email "$email"
+  git config --global mergetool.keepBackup false
+  git config --global core.autocrlf false
+  git config --global merge.tool kdiff3
+}
 check_default_shell() {
 	if [ -z "${SHELL##*zsh*}" ] ;then
 			echo "Default shell is zsh."
@@ -82,13 +95,7 @@ check_default_shell() {
 	fi
 }
 
-echo "We're going to do the following:"
-echo "1. Check to make sure you have zsh, vim, and tmux installed"
-echo "2. We'll help you install them if you don't"
-echo "3. We're going to check to see if your default shell is zsh"
-echo "4. We'll try to change it if it's not" 
-
-echo "Let's get started? (y/n)"
+echo "I'll Let's get started? (y/n)"
 old_stty_cfg=$(stty -g)
 stty raw -echo
 answer=$( while ! head -c 1 | grep -i '[ny]' ;do true ;done )
@@ -99,6 +106,7 @@ else
 	echo "Quitting, nothing was changed."
 	exit 0
 fi
+sudo apt-get update
 check_for_software git
 echo
 check_for_software gitk
@@ -110,6 +118,8 @@ echo
 check_for_software vim
 echo
 check_for_software tmux
+echo
+check_for_software kdiff3
 echo
 check_oh_my_zsh
 echo
@@ -131,8 +141,6 @@ if echo "$answer" | grep -iq "^y" ;then
 	mv ~/.tmux.conf ~/.tmux.conf.old
 	mv ~/.vimrc ~/.vimrc.old
 else
-	echo -e "\nNot backing up old dotfiles."
-fi
 
 printf "source '$(dirname $(readlink -f $0))/zsh/zshrc'" > "$HOME/.zshrc"
 printf "so $(dirname $(readlink -f $0))/vim/vimrc.vim" > ~/.vimrc
@@ -140,3 +148,23 @@ printf "source-file '$(dirname $(readlink -f $0))/tmux/tmux.conf'" > "$HOME/.tmu
 
 echo
 echo "Please log out and log back in for default shell to be initialized."
+
+
+
+echo "It's ubuntu? (y/n)"
+old_stty_cfg=$(stty -g)
+answer=$( while ! head -c 1 | grep -i '[ny]' ;do true ;done )
+stty $old_stty_cfg
+if echo "$answer" | grep -iq "^y" ;then
+	echo 
+else
+	echo "Then thanks :)"
+	exit 0
+fi
+
+sudo apt-get update
+sudo apt-get install software-properties-common apt-transport-https wget
+wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+sudo apt-get update
+sudo apt-get install code
