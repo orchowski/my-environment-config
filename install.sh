@@ -168,3 +168,10 @@ wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add
 sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
 sudo apt-get update
 sudo apt-get install code
+
+sudo apt install openjdk-8-jdk
+sudo apt install openjdk-11-jdk
+
+echo -e "Select which java you want to use now:\n"
+
+sudo update-alternatives --config java
