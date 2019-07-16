@@ -51,9 +51,19 @@ check_tmux_plugin_manager(){
     git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
     $HOME/.tmux/plugins/tpm
     tmux new -d -s foo
-    tmux send-keys -t foo.0 "$HOME/.tmux/plugins/tpm && $HOME/.tmux/plugins/tpm/scripts/install_plugins.sh" ENTER
+    tmux send-keys -t foo.0 $HOME/.tmux/plugins/tpm/tpm && $HOME/.tmux/plugins/tpm/scripts/install_plugins.sh ENTER
   else
 	echo "tmux plugin manager installed"
+  fi
+}
+
+configure_vim(){
+  echo "Checking to see if tmux plugin manager is installed"
+  if [ ! -d "$HOME/.vim/bundle" ]; then
+    mkdir -p $HOME/.vim/autoload $HOME/.vim/bundle && curl -LSso $HOME/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+    git clone https://github.com/scrooloose/nerdtree.git $HOME/.vim/bundle/nerdtree
+  else
+	echo "vim plugins installed"
   fi
 }
 
@@ -104,6 +114,8 @@ echo
 check_oh_my_zsh
 echo
 check_tmux_plugin_manager
+echo
+configure_vim
 echo
 
 check_default_shell
