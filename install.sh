@@ -71,9 +71,9 @@ configure_vim(){
 configure_git(){
   echo -e "Configuring git...\n"
   echo "email:"
-  email=$(stty -g)
+  read email
   echo "name:"
-  name=$(stty -g)
+  read name
   git config --global user.name "$name"
   git config --global user.email "$email"
   git config --global mergetool.keepBackup false
@@ -127,7 +127,8 @@ check_tmux_plugin_manager
 echo
 configure_vim
 echo
-
+configure_git
+echo
 check_default_shell
 
 echo
@@ -140,7 +141,7 @@ if echo "$answer" | grep -iq "^y" ;then
 	mv ~/.zshrc ~/.zshrc.old
 	mv ~/.tmux.conf ~/.tmux.conf.old
 	mv ~/.vimrc ~/.vimrc.old
-else
+fi
 
 printf "source '$(dirname $(readlink -f $0))/zsh/zshrc'" > "$HOME/.zshrc"
 printf "so $(dirname $(readlink -f $0))/vim/vimrc.vim" > ~/.vimrc
@@ -152,10 +153,10 @@ echo "Please log out and log back in for default shell to be initialized."
 
 
 echo "It's ubuntu? (y/n)"
-old_stty_cfg=$(stty -g)
-answer=$( while ! head -c 1 | grep -i '[ny]' ;do true ;done )
-stty $old_stty_cfg
-if echo "$answer" | grep -iq "^y" ;then
+xxx=$(stty -g)
+answer2=$( while ! head -c 1 | grep -i '[ny]' ;do true ;done )
+stty $xxx
+if echo "$answer2" | grep -iq "^y" ;then
 	echo 
 else
 	echo "Then thanks :)"
@@ -175,3 +176,5 @@ sudo apt install openjdk-11-jdk
 echo -e "Select which java you want to use now:\n"
 
 sudo update-alternatives --config java
+
+
