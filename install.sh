@@ -49,6 +49,9 @@ check_tmux_plugin_manager(){
   echo "Checking to see if tmux plugin manager is installed"
   if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
     git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
+    $HOME/.tmux/plugins/tpm
+    tmux new -d -s foo
+    tmux send-keys -t foo.0 "$HOME/.tmux/plugins/tpm && $HOME/.tmux/plugins/tpm/scripts/install_plugins.sh" ENTER
   else
 	echo "tmux plugin manager installed"
   fi
@@ -65,8 +68,6 @@ check_default_shell() {
 		stty $old_stty_cfg && echo
 		if echo "$answer" | grep -iq "^y" ;then
 			chsh -s $(which zsh)
-		else
-			echo "Warning: Your configuration won't work properly. If you exec zsh, it'll exec tmux which will exec your default shell which isn't zsh."
 		fi
 	fi
 }
@@ -122,7 +123,7 @@ else
 fi
 
 printf "source '$(dirname $(readlink -f $0))/zsh/zshrc'" > "$HOME/.zshrc"
-#printf "so $(dirname $(readlink -f $0))/vim/vimrc.vim" > ~/.vimrc
+printf "so $(dirname $(readlink -f $0))/vim/vimrc.vim" > ~/.vimrc
 printf "source-file '$(dirname $(readlink -f $0))/tmux/tmux.conf'" > "$HOME/.tmux.conf"
 
 echo
