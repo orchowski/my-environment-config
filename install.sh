@@ -49,7 +49,6 @@ check_tmux_plugin_manager(){
   echo "Checking to see if tmux plugin manager is installed"
   if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
     git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
-    $HOME/.tmux/plugins/tpm
     tmux new -d -s foo
     tmux send-keys -t foo.0 $HOME/.tmux/plugins/tpm/tpm && $HOME/.tmux/plugins/tpm/scripts/install_plugins.sh ENTER
   else
@@ -95,7 +94,7 @@ check_default_shell() {
 	fi
 }
 
-echo "I'll Let's get started? (y/n)"
+echo -e "I'll install some software.\nLet's get started? (y/n)"
 old_stty_cfg=$(stty -g)
 stty raw -echo
 answer=$( while ! head -c 1 | grep -i '[ny]' ;do true ;done )
@@ -128,6 +127,10 @@ echo
 configure_vim
 echo
 configure_git
+echo
+check_for_software terminator
+echo
+check_for_software keepassx
 echo
 check_default_shell
 
