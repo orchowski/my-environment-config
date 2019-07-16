@@ -11,7 +11,7 @@ prompt_install() {
 
 		elif [ -x "$(command -v brew)" ]; then
 			brew install $1
-		
+
 		elif [ -x "$(command -v zypper)" ]; then
 			sudo zypper install $1
 
@@ -39,7 +39,7 @@ check_for_software() {
 check_oh_my_zsh(){
   echo "Checking to see if ohmyzsh is installed"
   if [ ! -d "$HOME/.oh-my-zsh" ]; then
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"	
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
   else
 	echo "OhMyZsh installed"
   fi
@@ -88,8 +88,11 @@ else
 	echo "Quitting, nothing was changed."
 	exit 0
 fi
-
 check_for_software git
+echo
+check_for_software gitk
+echo
+check_for_software curl
 echo
 check_for_software zsh
 echo 
