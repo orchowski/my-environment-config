@@ -3,6 +3,8 @@ ZSH_THEME="af-magic"
 
 plugins=(
   git
+  docker
+  docker-compose
 )
 
 source $ZSH/oh-my-zsh.sh
