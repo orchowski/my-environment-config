@@ -1,0 +1,25 @@
+# Project exploration
+set NERDTree
+set highlightedyank
+let g:highlightedyank_highlight_duration = "-1"
+
+# should match if else etc. use % and g% 
+#   For example, go from "if" to "endif" to "else".
+set matchit
+
+map <c-w><c-w> :NERDTreeToggle<CR>
+
+set ideajoin
+
+:set number relativenumber
+:set nu rnu
+
+nnoremap <c-t> :action ActivateTerminalToolWindow<CR>
+nnoremap <c-t><c-t> :action Terminal.OpenInTerminal<CR>
+
+:nnoremap [m :action MethodUp<CR>
+:nnoremap ]m :action MethodDown<CR>
+
+:set scrolloff=20
+nnoremap <C-i> :action Forward<CR>
+nnoremap <C-o> :action Back<CR>
