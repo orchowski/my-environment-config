@@ -1,3 +1,7 @@
+# To use id do `source /full/path/to/this/file` in your's ~/.ideavimrc file
+# and make things work
+# 
+#
 # Project exploration
 set NERDTree
 set highlightedyank
@@ -17,9 +21,8 @@ set ideajoin
 nnoremap <c-t> :action ActivateTerminalToolWindow<CR>
 nnoremap <c-t><c-t> :action Terminal.OpenInTerminal<CR>
 
-:nnoremap [m :action MethodUp<CR>
-:nnoremap ]m :action MethodDown<CR>
+nnoremap [m :action MethodUp<CR>
+nnoremap ]m :action MethodDown<CR>
 
-:set scrolloff=20
 nnoremap <C-i> :action Forward<CR>
 nnoremap <C-o> :action Back<CR>
