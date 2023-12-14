@@ -7,4 +7,19 @@ plugins=(
   docker-compose
 )
 
+# PYTHON
+if command -v pyenv 1>/dev/null 2>&1; then
+ eval "$(pyenv init -)"
+ eval "$(pyenv init --path)" 
+fi
+
+export LDFLAGS="-L/usr/local/opt/openssl/lib"
+export CPPFLAGS="-I/usr/local/opt/openssl/include"
+
+# FLUTTER
+export PATH="$PATH:/Users/alex/flutter/bin"
+
+# VSCODE 
+export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+
 source $ZSH/oh-my-zsh.sh
