@@ -23,3 +23,4 @@ export PATH="$PATH:/Users/alex/flutter/bin"
 export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
 source $ZSH/oh-my-zsh.sh
+alias vim=nvim
