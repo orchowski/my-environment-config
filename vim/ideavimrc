@@ -15,8 +15,7 @@ map <c-w><c-w> :NERDTreeToggle<CR>
 
 set ideajoin
 
-:set number relativenumber
-:set nu rnu
+set nu rnu
 
 nnoremap <c-t> :action ActivateTerminalToolWindow<CR>
 nnoremap <c-t><c-t> :action Terminal.OpenInTerminal<CR>
