@@ -1,0 +1,60 @@
+# change window focus within space
+lalt - j : yabai -m window --focus south
+lalt - k : yabai -m window --focus north
+lalt - h : yabai -m window --focus west
+lalt - l : yabai -m window --focus east
+
+#change focus between external displays (left and right)
+lalt - s: yabai -m display --focus west
+lalt - g: yabai -m display --focus east
+
+# rotate layout clockwise
+lshift + lalt - r : yabai -m space --rotate 270
+
+# flip along y-axis
+lshift + lalt - y : yabai -m space --mirror y-axis
+
+# flip along x-axis
+lshift + lalt - x : yabai -m space --mirror x-axis
+
+# toggle window float
+lshift + lalt - t : yabai -m window --toggle float --grid 4:4:1:1:2:2
+
+# maximize a window
+lshift + lalt - z : yabai -m window --toggle zoom-fullscreen
+
+# balance out tree of windows (resize to occupy same area)
+lshift + lalt - b : yabai -m space --balance
+
+# swap windows
+lshift + lalt - j : yabai -m window --swap south
+lshift + lalt - k : yabai -m window --swap north
+lshift + lalt - h : yabai -m window --swap west
+lshift + lalt - l : yabai -m window --swap east
+
+# move window and split
+ctrl + lalt - j : yabai -m window --warp south
+ctrl + lalt - k : yabai -m window --warp north
+ctrl + lalt - h : yabai -m window --warp west
+ctrl + lalt - l : yabai -m window --warp east
+
+# move window to display left and right
+lshift + lalt - s : yabai -m window --display west; yabai -m display --focus west;
+lshift + lalt - g : yabai -m window --display east; yabai -m display --focus east;
+
+#move window to prev and next space
+lshift + lalt - p : yabai -m window --space prev;
+lshift + lalt - n : yabai -m window --space next;
+
+# move window to space #
+lshift + lalt - 1 : yabai -m window --space 1;
+lshift + lalt - 2 : yabai -m window --space 2;
+lshift + lalt - 3 : yabai -m window --space 3;
+lshift + lalt - 4 : yabai -m window --space 4;
+lshift + lalt - 5 : yabai -m window --space 5;
+lshift + lalt - 6 : yabai -m window --space 6;
+lshift + lalt - 7 : yabai -m window --space 7;
+
+ctrl + lalt - q : brew services stop yabai
+ctrl + lalt - s : brew services start yabai
+ctrl + lalt - r : brew services restart yabai
