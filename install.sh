@@ -56,6 +56,15 @@ check_tmux_plugin_manager(){
   fi
 }
 
+configure_nvim(){
+  echo "copying nvim config files"
+  if [ ! -d "$HOME/.config/nvim" ]; then
+	mkdir -p "$HOME/.config/"
+	cp -r "$(dirname $(readlink -f $0))/nvim" "$HOME/.config/nvim"
+  else
+	echo "there is already nvim confiuration delete .config/nvim directory to continue"
+  fi
+}
 configure_vim(){
   echo "Checking to see if vim plugin manager is installed"
   if [ ! -d "$HOME/.vim/bundle" ]; then
@@ -115,6 +124,8 @@ echo
 check_for_software zsh
 echo 
 check_for_software vim
+echo 
+check_for_software nvim
 echo
 check_for_software tmux
 echo
@@ -123,6 +134,9 @@ echo
 check_oh_my_zsh
 echo
 check_tmux_plugin_manager
+echo
+configure_nvim
+echo
 echo
 configure_vim
 echo
