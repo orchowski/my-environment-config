@@ -25,3 +25,5 @@ nnoremap ]m :action MethodDown<CR>
 
 nnoremap <C-i> :action Forward<CR>
 nnoremap <C-o> :action Back<CR>
+
+set clipboard+=unnamed

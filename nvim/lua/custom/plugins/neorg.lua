@@ -14,12 +14,12 @@ local modules = {
   ["core.defaults"] = {},
   ["core.completion"] = { config = { engine = "nvim-cmp", name = "[Norg]" } },
   ["core.integrations.nvim-cmp"] = {},
-  ["core.concealer"] = { config = { icon_preset = "diamond" } },
+  ["core.concealer"] = { config = { icon_preset = "varied" } },
   ["core.keybinds"] = {
     -- https://github.com/nvim-neorg/neorg/blob/main/lua/neorg/modules/core/keybinds/keybinds.lua
     config = {
       default_keybinds = true,
-      neorg_leader = "<Leader><Leader>",
+      neorg_leader = "'",
     },
   },
   ["core.dirman"] = {
@@ -30,8 +30,13 @@ local modules = {
       default_workspace = "Notes",
     }
   },
+  ["core.presenter"] = {
+    config = {
+      zen_mode = "zen-mode"
+    }
+  },
 }
 M.opts = {
   load = modules,
 }
-return z
+return M
