@@ -5,8 +5,8 @@ lalt - h : yabai -m window --focus west
 lalt - l : yabai -m window --focus east
 
 #change focus between external displays (left and right)
-lalt - s: yabai -m display --focus west
-lalt - g: yabai -m display --focus east
+lalt - g: yabai -m display --focus north
+lalt - s: yabai -m display --focus south
 
 # rotate layout clockwise
 lshift + lalt - r : yabai -m space --rotate 270
@@ -39,8 +39,8 @@ ctrl + lalt - h : yabai -m window --warp west
 ctrl + lalt - l : yabai -m window --warp east
 
 # move window to display left and right
-lshift + lalt - s : yabai -m window --display west; yabai -m display --focus west;
-lshift + lalt - g : yabai -m window --display east; yabai -m display --focus east;
+lshift + lalt - g : yabai -m window --display north; yabai -m display --focus north;
+lshift + lalt - s : yabai -m window --display south; yabai -m display --focus south;
 
 #move window to prev and next space
 lshift + lalt - p : yabai -m window --space prev;
