@@ -20,6 +20,7 @@ return {
 
     -- Add your own debuggers here
     'leoluz/nvim-dap-go',
+    'mxsdev/nvim-dap-vscode-js'
   },
   config = function()
     local dap = require 'dap'
@@ -74,8 +75,6 @@ return {
       },
     }
 
-    vim.api.nvim_create_user_command('DapuiToggle', dapui.toggle, {})
-
     -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
     vim.keymap.set('n', '<F7>', dapui.toggle, { desc = 'Debug: See last session result.' })
 
@@ -85,31 +84,76 @@ return {
 
     -- Install golang specific config
     require('dap-go').setup()
-    require("dap").adapters["pwa-node"] = {
-      type = "server",
-      host = "localhost",
-      port = "${port}",
-      executable = {
-        command = "node",
-        -- 💀 Make sure to update this path to point to your installation
-        args = { "/Users/alex/.config/nvim/packages/js-debug/src/dapDebugServer.js", "${port}" },
-      }
+
+    dap.adapters.kotlin = {
+        type = "executable",
+        command = "kotlin-debug-adapter",
+        options = { auto_continue_if_many_stopped = true },
     }
-    dap.configurations.typescript = {
-      {
-        type = 'pwa-node',
-        request = 'launch',
-        name = "Launch file",
-        runtimeExecutable = "deno",
-        runtimeArgs = {
-          "run",
-          "--inspect-wait",
-          "--allow-all"
+
+    dap.configurations.kotlin = {
+        {
+            type = "kotlin",
+            request = "launch",
+            name = "This file",
+            -- may differ, when in doubt, whatever your project structure may be,
+            -- it has to correspond to the class file located at `build/classes/`
+            -- and of course you have to build before you debug
+            mainClass = function()
+                local root = vim.fs.find("src", { path = vim.uv.cwd(), upward = true, stop = vim.env.HOME })[1] or ""
+                local fname = vim.api.nvim_buf_get_name(0)
+                -- src/main/kotlin/websearch/Main.kt -> websearch.MainKt
+                return fname:gsub(root, ""):gsub("main/kotlin/", ""):gsub(".kt", "Kt"):gsub("/", "."):sub(2, -1)
+            end,
+            projectRoot = "${workspaceFolder}",
+            jsonLogFile = "",
+            enableJsonLogging = false,
         },
-        program = "${file}",
-        cwd = "${workspaceFolder}",
-        attachSimplePort = 9229,
-      },
+        {
+            -- Use this for unit tests
+            -- First, run 
+            -- ./gradlew --info cleanTest test --debug-jvm
+            -- then attach the debugger to it
+            type = "kotlin",
+            request = "attach",
+            name = "Attach to debugging session",
+            port = 5005,
+            args = {},
+            projectRoot = vim.fn.getcwd,
+            hostName = "localhost",
+            timeout = 2000,
+        },
+
     }
+
+    require("dap-vscode-js").setup({
+      -- node_path = "node", -- Path of node executable. Defaults to $NODE_PATH, and then "node"
+      debugger_path = vim.fn.resolve(vim.fn.stdpath("data") .. "/vscode-js-debug"),
+      -- debugger_cmd = { "js-debug-adapter" }, -- Command to use to launch the debug server. Takes precedence over `node_path` and `debugger_path`.
+      adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' }, -- which adapters to register in nvim-dap
+      -- log_file_path = "(stdpath cache)/dap_vscode_js.log" -- Path for file logging
+      -- log_file_level = false -- Logging level for output to file. Set to false to disable file logging.
+      -- log_console_level = vim.log.levels.ERROR -- Logging level for output to console. Set to false to disable console output.
+    })
+
+    for _, language in ipairs({ "typescript", "javascript" }) do
+      --- look for vscode config support https://miguelcrespo.co/posts/debugging-javascript-applications-with-neovim/
+      require("dap").configurations[language] = {
+            {
+              type = "pwa-node",
+              request = "launch",
+              name = "Launch file",
+              program = "${file}",
+              cwd = "${workspaceFolder}",
+            },
+            {
+              type = "pwa-node",
+              request = "attach",
+              name = "Attach",
+              processId = require'dap.utils'.pick_process,
+              cwd = "${workspaceFolder}",
+            }
+      }
+    end
   end,
 }

@@ -7,6 +7,9 @@ return {
     "MunifTanjim/nui.nvim",
   },
   config = function ()
-    require('neo-tree').setup {}
+    require('neo-tree').setup {
+      vim.api.nvim_set_keymap('n', '<C-n>', '<Cmd>Neotree toggle<CR>', {silent = true});
+      vim.api.nvim_set_keymap('n', '<C-S-s>', '<Cmd>Neotree reveal<CR>', {silent = true});
+    }
   end,
 }
