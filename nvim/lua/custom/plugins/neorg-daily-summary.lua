@@ -76,7 +76,7 @@ local function dailySummary()
     print("Plik dailies.norg został utworzony w " .. workspace_path)
 end
 
-local function DailyToday()
+local function DailyEntryCreateAt(date)
     local workspace_path = odczytajWorkspace()
     if not workspace_path then
         print("Nie znaleziono workspace w konfiguracji Neorg.")
@@ -85,8 +85,7 @@ local function DailyToday()
     workspace_path = workspace_path:gsub("~", os.getenv("HOME")) -- zamień ~ na ścieżkę do katalogu domowego
 
     local daily_path = workspace_path .. "/daily"
-    local today = os.date("%d-%m-%Y")
-    local today_file_path = daily_path .. "/" .. today .. ".norg"
+    local today_file_path = daily_path .. "/" .. date .. ".norg"
 
     -- Sprawdź, czy plik już istnieje
     local file_exists = io.open(today_file_path, "r")
@@ -94,7 +93,7 @@ local function DailyToday()
         -- Plik nie istnieje, więc go tworzymy i zapisujemy podstawową treść
         local file = io.open(today_file_path, "w")
         if file then
-            file:write("#+TITLE: Daily Notes for " .. today .. "\n\n")
+            file:write("#+TITLE: Daily Notes for " .. date .. "\n\n")
             file:close()
         end
     else
@@ -107,6 +106,16 @@ local function DailyToday()
     vim.api.nvim_command('edit ' .. today_file_path)
 end
 
+local function DailyToday()
+    local today = os.date("%d-%m-%Y")
+    DailyEntryCreateAt(today)
+end
+
+local function DailyNextDay()
+    local tomorrow = os.date("%d-%m-%Y", os.time() + 86400)
+    DailyEntryCreateAt(tomorrow)
+end
+vim.api.nvim_create_user_command('DailyNext', DailyNextDay, {})
 vim.api.nvim_create_user_command('DailyToday', DailyToday, {})
 vim.api.nvim_create_user_command('DailySummary', dailySummary, {})
 return {}
