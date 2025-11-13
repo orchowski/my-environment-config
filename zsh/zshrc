@@ -30,3 +30,59 @@ export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/b
 source $ZSH/oh-my-zsh.sh
 alias vim=nvim
 export PATH="$PATH:$HOME/.config/nvim/kotlin-debug-adapter"
+
+
+function work() {
+  local dir=$1
+
+  if [ -z "$TMUX" ]; then
+    echo "⚠️  start tmux session first"
+    return
+  fi
+  cd ~/projects/$dir
+
+	tmux new-window -n "$dir" -c "$project_dir"
+
+	tmux send-keys "nvim ." C-m
+
+	tmux split-window -v -c "$project_dir"
+	tmux send-keys "clear" C-m
+
+	tmux select-pane -U
+	tmux split-window -h -c "$project_dir"
+	tmux send-keys "aider" C-m
+	tmux resize-pane -t 1 -x 30%
+	tmux resize-pane -t 2 -y 10%
+	tmux select-pane -R
+cd -
+}
+
+local SUBPROJECTS=("MONETISATION" "carramba")  # dodaj swoje
+
+_work() {
+  local base=~/projects
+  local search_dirs=("$base")
+  local candidates=()
+
+  # Dodaj specjalne podkatalogi do skanowania
+  for subproject in "${SUBPROJECTS[@]}"; do
+    [ -d "$base/$subproject" ] && search_dirs+=("$base/$subproject")
+  done
+
+  for d in "${search_dirs[@]}"; do
+    for dir in "$d"/*; do
+      [ -d "$dir" ] || continue
+      local name
+      # jeśli katalog leży w podkatalogu, dodaj prefix
+      if [[ "$d" != "$base" ]]; then
+        name="$(basename "$d")/$(basename "$dir")"
+      else
+        name="$(basename "$dir")"
+      fi
+      candidates+=("$name")
+    done
+  done
+
+  _arguments "1:project:(${candidates[*]})"
+}
+compdef _work work
