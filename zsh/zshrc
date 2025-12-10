@@ -4,6 +4,7 @@ plugins=(
   git
   docker
   docker-compose
+  kubectl
   fzf-zsh-plugin
   fzf-tab
 )
@@ -57,14 +58,13 @@ function work() {
 cd -
 }
 
-local SUBPROJECTS=("MONETISATION" "carramba")  # dodaj swoje
+local SUBPROJECTS=("MONETISATION" "carramba") 
 
 _work() {
   local base=~/projects
   local search_dirs=("$base")
   local candidates=()
 
-  # Dodaj specjalne podkatalogi do skanowania
   for subproject in "${SUBPROJECTS[@]}"; do
     [ -d "$base/$subproject" ] && search_dirs+=("$base/$subproject")
   done
@@ -73,7 +73,6 @@ _work() {
     for dir in "$d"/*; do
       [ -d "$dir" ] || continue
       local name
-      # jeśli katalog leży w podkatalogu, dodaj prefix
       if [[ "$d" != "$base" ]]; then
         name="$(basename "$d")/$(basename "$dir")"
       else
